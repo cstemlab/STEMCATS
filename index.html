@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM CATS - Course Portal</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <style>
+        :root {
+            --primary-light: #e0e5ec;
+            --text-light: #2d3436;
+            --shadow-light: #a3b1c6;
+            --highlight-light: #ffffff;
+            
+            --primary-dark: #1a1f25;
+            --text-dark: #ecf0f1;
+            --shadow-dark: #000000;
+            --highlight-dark: #2d3436;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-light);
+            color: var(--text-light);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background: var(--primary-dark);
+            color: var(--text-dark);
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            animation: float 15s infinite;
+            opacity: 0.1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            background: var(--primary-light);
+            box-shadow: 5px 5px 10px var(--shadow-light),
+                       -5px -5px 10px var(--highlight-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .dark-mode .theme-toggle {
+            background: var(--primary-dark);
+            box-shadow: 5px 5px 10px var(--shadow-dark),
+                       -5px -5px 10px var(--highlight-dark);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #3498db, #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .card {
+            padding: 2rem;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            box-shadow: 10px 10px 20px var(--shadow-light),
+                       -10px -10px 20px var(--highlight-light);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .dark-mode .card {
+            box-shadow: 10px 10px 20px var(--shadow-dark),
+                       -10px -10px 20px var(--highlight-dark);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-image {
+            transform: scale(1.05);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .dark-mode .card h2 {
+            color: #4fa3e0;
+        }
+
+        .card p {
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image {
+                height: 300px;
+            }
+
+            .card-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation">
+        <div class="circle" style="width: 100px; height: 100px; left: 10%; top: 20%;"></div>
+        <div class="circle" style="width: 150px; height: 150px; right: 20%; top: 40%;"></div>
+        <div class="circle" style="width: 80px; height: 80px; left: 30%; bottom: 30%;"></div>
+        <div class="circle" style="width: 120px; height: 120px; right: 15%; bottom: 20%;"></div>
+    </div>
+
+    <button class="theme-toggle" aria-label="Toggle theme">🌓</button>
+
+    <div class="container">
+        <header data-aos="fade-down">
+            <img src="images/HERO.png" class="hero-image">
+            <h1>STEM CATS Resources Portal</h1>
+            <p class="subtitle">Welcome to the web portal for STEM CATS, here, you will find the links, documents, and more to be used during the course to better understand the interdisciplinary nature of STEM Education.</p>
+        </header>
+        
+        <h1>To the Moon [STEM + Space Survival]</h1>
+        
+        <div class="grid">
+            <div class="card" data-aos="fade-up">
+                <img src="images/MOON.png" alt="To the Moon" class="card-image">
+                <h2><a href="https://www.csuchico.edu/anthmuseum/_assets/documents/nasa-exercise-survival-on-the-moon.pdf">Worksheet</a></h2>
+                <p>Download the worksheet created by NASA here.</p>
+            </div>
+
+            <div class="card" data-aos="fade-up">
+                
+            </div>
+
+            <div class="card" data-aos="fade-up">
+                
+            </div>
+
+
+            
+        </div>
+
+        <h1>Know Future [STEM + Future Literacy]</h1>
+    
+        <div class="grid">
+            <div class="card" data-aos="fade-up">
+                <img src="images/FUTURE.png" alt="Future" class="card-image">
+                <h2><a href="https://udify.app/chat/na6PqufcVIZU52Br">AI Bot by Future Cocreate</a></h2>
+                <p>AI Bot</p>
+            </div>
+
+            <div class="card" data-aos="fade-up">
+                <img src="images/FUTURE.png" alt="Future" class="card-image">
+                <h2><a href="https://chat.qwenlm.ai/">Qwen</a></h2>
+                <p>AI Bot</p>
+            </div>
+            
+            <div class="card" data-aos="fade-up">
+                <img src="images/FUTURE.png" alt="Future" class="card-image">
+                <h2><a href="https://www.futurescocreate.org/">Future Cocreate</a></h2>
+                <p>More about Future Cocreate</p>
+            </div>
+            
+        </div>
+    
+    <h1>Sushi Game [STEM + Algorithms]</h1>
+    
+        <div class="grid">
+            <div class="card" data-aos="fade-up">
+                <img src="images/SUSHI.png" alt="Sushi" class="card-image">
+                <h2><a href="https://www.google.com/">Sushi Game</a></h2>
+                <p>Play Game Here</p>
+            </div>
+
+            <div class="card" data-aos="fade-up">
+                <img src="images/SUSHI.png" alt="Sushi" class="card-image">
+                <h2><a href="https://scratch.mit.edu/projects/1133341887">Sushi Game Code 1</a></h2>
+                <p>Sushi Game Code 1</p>
+            </div>
+            
+            <div class="card" data-aos="fade-up">
+                <img src="images/SUSHI.png" alt="Sushi" class="card-image">
+                <h2><a href="https://scratch.mit.edu/projects/1133342503">Sushi Game Code 2</a></h2>
+                <p>Sushi Game Code 2</p>
+            </div>
+            
+        </div>
+
+    <h1>Maps [STEM + Geometry]</h1>
+    <div class="grid">
+        <div class="card" data-aos="fade-up">
+            <img src="images/STEMCATS.png" alt="STEMCATS" class="card-image">
+        </div>
+
+        <div class="card" data-aos="fade-up">
+           
+        </div>
+        
+        <div class="card" data-aos="fade-up">
+            
+        </div>
+        
+    </div>
+
+    <h1>Book Bits [STEM + Nature of Science]</h1>
+    <div class="grid">
+        <div class="card" data-aos="fade-up">
+            <img src="images/BOOKBITS.png" alt="Book Bits" class="card-image">    
+        </div>
+
+        <div class="card" data-aos="fade-up">
+           
+        </div>
+        
+        <div class="card" data-aos="fade-up">
+            
+        </div>
+        
+    </div>
+
+    <h1>SDG Innovation League [STEM + Coaching]</h1>
+    <div class="grid">
+        <div class="card" data-aos="fade-up">
+            <img src="images/Zester.png" alt="SDG" class="card-image">
+        </div>
+
+        <div class="card" data-aos="fade-up">
+           
+        </div>
+        
+        <div class="card" data-aos="fade-up">
+            
+        </div>
+        
+    </div>
+
+    <h1>Picture Books [STEM + Science Identity]</h1>
+    <div class="grid">
+        <div class="card" data-aos="fade-up">
+            <img src="images/STEMCATS.png" alt="STEMCATS" class="card-image">
+        </div>
+
+        <div class="card" data-aos="fade-up">
+           
+        </div>
+        
+        <div class="card" data-aos="fade-up">
+            
+        </div>
+        
+    </div>
+
+    <h1>Aliens [STEM + Astro-sociology]</h1>
+    <div class="grid">
+        <div class="card" data-aos="fade-up">
+            <img src="images/STEMCATS.png" alt="STEMCATS" class="card-image">
+        </div>
+
+        <div class="card" data-aos="fade-up">
+           
+        </div>
+        
+        <div class="card" data-aos="fade-up">
+            
+        </div>
+        
+    </div>
+
+    </div>
+
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        const themeToggle = document.querySelector('.theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        function createFloatingCircles() {
+            const circles = document.querySelectorAll('.circle');
+            circles.forEach(circle => {
+                const randomX = Math.random() * window.innerWidth;
+                const randomY = Math.random() * window.innerHeight;
+                circle.style.left = `${randomX}px`;
+                circle.style.top = `${randomY}px`;
+            });
+        }
+
+        createFloatingCircles();
+        window.addEventListener('resize', createFloatingCircles);
+    </script>
+</body>
+</html>
